@@ -31,7 +31,7 @@
 };
 
 #declare right_thumb = object { thumb(20,80) }
-#declare right_finger = object { finger(30,60) }
+#declare right_finger = object { finger(40,90) }
 #declare right_fingers = array[4] {
 	right_thumb, right_finger, right_finger, right_finger
 };
