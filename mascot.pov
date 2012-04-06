@@ -175,8 +175,8 @@ union {
 		union {	// foot
 			sphere {
 				<0,0,0>, leg_rad
-				translate <0, 0, -leg_rad*.7>
-				scale <1.5, .75, 3>
+				translate <0, 0, -leg_rad*.6>
+				scale <1.5, .75, 2.5>
 			}
 			texture { foot_tex }
 			translate <0, -lower_leg_len, 0>
@@ -324,39 +324,6 @@ union {
 
 	translate <-body_width/2, waist, 0>
 }
-
-#local ruler = 0;
-#if (ruler)
-	union {
-		cylinder {
-			<0,0,0>, <0,H,0>, H/75
-			pigment { Yellow }
-			finish { metalfin }
-		}
-
-		cylinder {
-			#local mark_h = 0.68;
-			<0, mark_h, 0>, <0, mark_h - H/150, 0>, H/20
-			pigment { Yellow }
-			finish { metalfin }
-		}
-
-		cylinder {
-			#local mark_h = 0.5;
-			<0, mark_h, 0>, <0, mark_h - H/150, 0>, H/20
-			pigment { Yellow }
-			finish { metalfin }
-		}
-
-		cylinder {
-			<-W,0,0>, <W,0,0>, H/75
-			pigment { Yellow }
-			finish { metalfin }
-		}
-
-		translate <0, waist, 0>
-	}
-#end
 
 light_source { <100,400,-800> White }
 background { White*0.3 }
