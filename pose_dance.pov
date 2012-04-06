@@ -46,7 +46,7 @@
 #declare right_thigh_fwd_angle = 10;
 #declare right_thigh_out_angle = 50;
 #declare right_knee_angle = 30;
-#declare right_foot_angle = 20;
+#declare right_foot_angle = 40;
 
 // Generate the model
 object {

@@ -175,13 +175,20 @@ union {
 			<0,0,0>, <0, -lower_leg_len, 0>, leg_rad
 		}
 		union {	// foot
-			sphere {
-				<0,0,0>, leg_rad
-				translate <0, 0, -leg_rad*.6>
-				scale <1.5, .75, 2.5>
+			difference {
+				sphere {
+					<0,0,0>, leg_rad
+				}
+				box {
+					-1.1*<leg_rad,leg_rad,leg_rad>,
+					1.1*<leg_rad,0,leg_rad>
+				}
+				translate <0, 0, -leg_rad>
+				scale <1.5, 1.3, 2.2>
+				rotate -x*foot_angle
+				translate <0, 0, leg_rad>
 			}
 			texture { foot_tex }
-			rotate -x*foot_angle
 			translate <0, -lower_leg_len, 0>
 		}
 		rotate -x*knee_angle
