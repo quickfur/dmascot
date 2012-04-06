@@ -232,12 +232,12 @@ union {
 	// Eyes
 	object {	// left eye
 		eye(left_eye_v_angle, left_eye_h_angle)
-		rotate z*10
+		transform { left_eye_tilt }
 		translate left_eye_pos
 	}
 	object {	// right eye
 		eye(right_eye_v_angle, right_eye_h_angle)
-		rotate -z*1
+		transform { right_eye_tilt }
 		translate right_eye_pos
 	}
 

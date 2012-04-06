@@ -6,9 +6,11 @@
 // Setup the pose
 #declare left_eye_v_angle = 10;
 #declare left_eye_h_angle = 0;
+#declare left_eye_tilt = transform { rotate z*10 };
 
 #declare right_eye_v_angle = 10;
 #declare right_eye_h_angle = 0;
+#declare right_eye_tilt = transform { rotate z*5 };
 
 #declare left_shoulder_raise_angle = 145;
 #declare left_shoulder_fwd_angle = 0;
@@ -47,4 +49,7 @@
 #declare right_foot_angle = 20;
 
 // Generate the model
-gen_mascot()
+object {
+	gen_mascot()
+	rotate z*5
+}

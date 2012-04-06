@@ -6,9 +6,11 @@
 // Setup the pose
 #declare left_eye_v_angle = -10;
 #declare left_eye_h_angle = -10;
+#declare left_eye_tilt = transform { rotate z*10 };
 
 #declare right_eye_v_angle = -10;
 #declare right_eye_h_angle = -10;
+#declare right_eye_tilt = transform { rotate -z*1 };
 
 #declare left_shoulder_raise_angle = 80;
 #declare left_shoulder_fwd_angle = 0;
