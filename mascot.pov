@@ -36,12 +36,12 @@
 #declare body_width = 0.7;
 
 #local arm_rad = 0.05;
-#local upper_arm_len = 0.25;
+#local upper_arm_len = 0.3;
 #local forearm_len = 0.25;
 #local wrist_width = arm_rad * 1.5;
 #local wrist_thickness = arm_rad;
 
-#macro arm(raise_angle, fwd_angle, out_angle, elbow_angle)
+#macro arm(raise_angle, fwd_angle, out_angle, elbow_angle, hand)
 union {
 	sphere {	// shoulder
 		<0,0,0>, arm_rad
@@ -58,16 +58,18 @@ union {
 			}
 
 			union {
-				cylinder {
-					<0, -forearm_len, 0>, <0,0,0>, arm_rad
+				cylinder {	// forearm
+					<0, -forearm_len+arm_rad/2, 0>, <0,0,0>,
+					arm_rad
+				}
+
+				sphere {	// wrist
+					<0, -forearm_len+arm_rad/2, 0>, arm_rad
 				}
 
 				// Hand
-				sphere {
-					// TEMPORARY
-					<0,0,0>, arm_rad*2
-					texture { hand_tex }
-					scale <1,1,.65>
+				object {
+					hand
 					translate <0, -forearm_len, 0>
 				}
 
@@ -75,16 +77,87 @@ union {
 			}
 			translate <0, -upper_arm_len, 0>
 		}
-		rotate y*shoulder_out_angle
+		rotate -y*shoulder_out_angle
 		rotate x*shoulder_fwd_angle
 		rotate z*shoulder_raise_angle
 	}
 }
 #end
 
-#local leg_rad = arm_rad*1.2;
-#local thigh_len = 0.3;
-#local lower_leg_len = thigh_len*1;
+#declare palm_rad = arm_rad*1.2;
+
+#macro hand(twist_angle, spread, fingers)
+union {
+	sphere {
+		<0,0,0>, palm_rad
+		scale <.75,1,1>
+	}
+
+	// Thumb (==fingers[0])
+	object {
+		fingers[0]
+
+		rotate x*40
+		rotate y*30
+		translate <-palm_rad*.1, palm_rad*.4, -palm_rad*.8>
+	}
+
+	// Fingers
+	#local i = 1;
+	#while (i < dimension_size(fingers,1))
+		//#local ang = (i-2)*45;
+		#local ang = i*180/dimension_size(fingers,1) - 90;
+		object {
+			fingers[i]
+			rotate -x*ang*.75
+			translate <0, -palm_rad*.9, 0>
+			rotate x*ang
+		}
+		#local i = i+1;
+	#end
+
+	rotate -y*twist_angle
+	translate <0, -palm_rad, 0>
+	texture { hand_tex }
+}
+#end
+
+#macro digit(len,rad,joint_pos,base_angle,joint_angle)
+union {
+	sphere {
+		<0,-.5,0>, .65
+		scale <rad, len*joint_pos, rad>
+	}
+	sphere {
+		<0,-.5,0>, .6
+		scale <rad, len*(1-joint_pos), rad>
+		rotate -z*joint_angle
+		translate <0, -len*joint_pos, 0>
+	}
+	rotate -z*base_angle
+}
+#end
+
+#declare thumb_len = 0.13;
+#declare thumb_rad = 0.045;
+#declare thumb_joint_pos = 0.6;
+
+#macro thumb(base_angle,joint_angle)
+	digit(thumb_len, thumb_rad, thumb_joint_pos, base_angle, joint_angle)
+#end
+
+#declare finger_len = 0.1;
+//#declare finger_len = 0.00001;
+#declare finger_rad = 0.04;
+#declare finger_joint_pos = 0.6;	// ratio of finger_len
+
+#macro finger(base_angle,joint_angle)
+	digit(finger_len, finger_rad, finger_joint_pos, base_angle, joint_angle)
+#end
+
+#declare leg_rad = arm_rad*1.2;
+#declare thigh_len = 0.3;
+#declare lower_leg_len = thigh_len*1;
 
 #macro leg(fwd_angle, out_angle, knee_angle, foot_angle)
 union {
@@ -132,24 +205,44 @@ union {
 	#local right_shoulder_x = 0.07;
 	union {
 		object {	// left arm
-			#local shoulder_raise_angle = 30;
-			#local shoulder_fwd_angle = 20;
-			#local shoulder_out_angle = 10;
-			#local elbow_angle = 50;
+			#local shoulder_raise_angle = 80;
+			#local shoulder_fwd_angle = 0;
+			#local shoulder_out_angle = 60;
+			#local elbow_angle = 70;
+			#local wrist_twist = 30;
+
+			#declare thumb1 = object { thumb(0,20) }
+			#declare fing1 = object { finger(20,20) }
+
+			#local fingers = array[4] {
+				thumb1, fing1, fing1, fing1
+			};
 
 			arm(shoulder_raise_angle, shoulder_fwd_angle,
-				shoulder_out_angle, elbow_angle)
+				shoulder_out_angle, elbow_angle,
+				hand(wrist_twist, 0, fingers))
 
 			translate <left_shoulder_x, shoulder_y, 0>
 		}
 		object {	// right arm
 			#local shoulder_raise_angle = 50;
-			#local shoulder_fwd_angle = 20;
-			#local shoulder_out_angle = 10;
-			#local elbow_angle = 20;
+			#local shoulder_fwd_angle = -10;
+			#local shoulder_out_angle = -30;
+			#local elbow_angle = 80;
+			#local wrist_twist = 45;
+
+			#declare thumb1 = object { thumb(0,70) }
+			#declare fing1 = object { finger(45,80) }
+			#declare fingers = array[4] {
+				thumb1,
+				fing1,
+				fing1,
+				fing1
+			};
 
 			arm(shoulder_raise_angle, shoulder_fwd_angle,
-				shoulder_out_angle, elbow_angle)
+				shoulder_out_angle, elbow_angle,
+				hand(wrist_twist, 0, fingers))
 
 			scale <-1,1,1>	// right arm = mirror image of left arm
 			translate <right_shoulder_x, shoulder_y, 0>
