@@ -190,7 +190,48 @@ union {
 }
 #end
 
+//#declare eye_y = 0.68;
+#declare eye_y = 0.7;
+#declare left_eye_pos = <.65*body_width, eye_y, 0>;
+#declare right_eye_pos = <.35*body_width, eye_y, 0>;
+#declare eye_h = 0.25;
+#declare eye_w = eye_h * .5;
+
+#macro eye(v_angle, h_angle)
+sphere {
+	<0,1,0>/2, 1/2
+	pigment {
+		gradient -z
+		color_map {
+			[0.0 Black]
+			[0.5 Black]
+			[0.5 White]
+			[1.0 White]
+		}
+		scale <1,1,1000>
+		translate <0, 0, -.9>/2
+	}
+	finish {
+		ambient amb
+		phong .9
+	}
+	scale <eye_w, eye_h, eye_w>
+}
+#end
+
 union {
+	// Eyes
+	object {	// left eye
+		eye(0,0)
+		rotate z*10
+		translate left_eye_pos
+	}
+	object {	// right eye
+		eye(0,0)
+		rotate -z*1
+		translate right_eye_pos
+	}
+
 	// Body (bo-D ?)
 	text {
 		ttf "timrom.ttf" "D" body_thickness 0
@@ -320,7 +361,8 @@ background { White*0.3 }
 camera {
 	location <-.4, .5, -2>	// final view
 	//location <-.3, .3, -1.5>
-	//location <0, .3, -1>	// front view, near
+	//location <0, .3, -1>		// front view, near
+	//location <-2, .5, -.4>	// right side view
 	look_at <0, 0, 0>
 
 	//location <0, .4, -.5>
