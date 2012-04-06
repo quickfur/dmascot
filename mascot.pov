@@ -175,8 +175,8 @@ union {
 		union {	// foot
 			sphere {
 				<0,0,0>, leg_rad
+				translate <0, 0, -leg_rad*.7>
 				scale <1.5, .75, 3>
-				translate <0, 0, -leg_rad*1>
 			}
 			texture { foot_tex }
 			translate <0, -lower_leg_len, 0>
@@ -365,8 +365,10 @@ camera {
 	//location <-.3, .3, -1.5>
 	//location <0, .3, -1>		// front view, near
 	//location <-2, .5, -.4>	// right side view
-	look_at <0, 0, 0>
+	look_at <0, -.1, 0>
 
 	//location <0, .4, -.5>
 	//look_at <0, .4, 0>
+
+	right x*3/3
 }
