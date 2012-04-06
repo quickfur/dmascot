@@ -53,3 +53,9 @@ object {
 	gen_mascot()
 	rotate z*5
 }
+
+camera {
+	location <-.4, .5, -2>	// final view
+	look_at <0, 0, 0>
+	right x*3/3
+}

@@ -25,3 +25,4 @@ env = Environment(
 
 env.Pose('mascot.png', 'pose_heythere.pov')
 env.Pose('dance.png', 'pose_dance.pov')
+env.Pose('running.png', 'pose_running.pov')

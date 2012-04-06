@@ -48,3 +48,9 @@
 
 // Generate the model
 gen_mascot()
+
+camera {
+	location <-.4, .5, -2>	// final view
+	look_at <0, 0, 0>
+	right x*3/3
+}
