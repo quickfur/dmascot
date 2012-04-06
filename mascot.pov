@@ -215,6 +215,8 @@ sphere {
 		ambient amb
 		phong .9
 	}
+	rotate x*v_angle
+	rotate y*h_angle
 	scale <eye_w, eye_h, eye_w>
 }
 #end
@@ -222,12 +224,12 @@ sphere {
 union {
 	// Eyes
 	object {	// left eye
-		eye(0,0)
+		eye(-10,-10)
 		rotate z*10
 		translate left_eye_pos
 	}
 	object {	// right eye
-		eye(0,0)
+		eye(-10,-10)
 		rotate -z*1
 		translate right_eye_pos
 	}
