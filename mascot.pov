@@ -1,5 +1,5 @@
 /*
- * Prospective mascot for D?
+ * Prospective mascot for D
  */
 
 #include "colors.inc"
@@ -29,17 +29,15 @@
 
 #declare foot_tex = hand_tex;
 
-#declare H = 0.75;
-#declare W = 0.75;
 #declare waist = -.3;
 #declare body_thickness = .2;
 #declare body_width = 0.7;
 
-#local arm_rad = 0.05;
-#local upper_arm_len = 0.3;
-#local forearm_len = 0.25;
-#local wrist_width = arm_rad * 1.5;
-#local wrist_thickness = arm_rad;
+#declare arm_rad = 0.05;
+#declare upper_arm_len = 0.3;
+#declare forearm_len = 0.25;
+#declare wrist_width = arm_rad * 1.5;
+#declare wrist_thickness = arm_rad;
 
 #macro arm(raise_angle, fwd_angle, out_angle, elbow_angle, hand)
 union {
@@ -77,9 +75,9 @@ union {
 			}
 			translate <0, -upper_arm_len, 0>
 		}
-		rotate -y*shoulder_out_angle
-		rotate x*shoulder_fwd_angle
-		rotate z*shoulder_raise_angle
+		rotate -y*out_angle
+		rotate x*fwd_angle
+		rotate z*raise_angle
 	}
 }
 #end
@@ -221,15 +219,19 @@ sphere {
 }
 #end
 
+/*
+ * The actual mascot model
+ */
+#macro gen_mascot()
 union {
 	// Eyes
 	object {	// left eye
-		eye(-10,-10)
+		eye(left_eye_v_angle, left_eye_h_angle)
 		rotate z*10
 		translate left_eye_pos
 	}
 	object {	// right eye
-		eye(-10,-10)
+		eye(right_eye_v_angle, right_eye_h_angle)
 		rotate -z*1
 		translate right_eye_pos
 	}
@@ -248,44 +250,17 @@ union {
 	#local right_shoulder_x = 0.07;
 	union {
 		object {	// left arm
-			#local shoulder_raise_angle = 80;
-			#local shoulder_fwd_angle = 0;
-			#local shoulder_out_angle = 60;
-			#local elbow_angle = 70;
-			#local wrist_twist = 30;
-
-			#declare thumb1 = object { thumb(0,20) }
-			#declare fing1 = object { finger(20,20) }
-
-			#local fingers = array[4] {
-				thumb1, fing1, fing1, fing1
-			};
-
-			arm(shoulder_raise_angle, shoulder_fwd_angle,
-				shoulder_out_angle, elbow_angle,
-				hand(wrist_twist, 0, fingers))
+			arm(left_shoulder_raise_angle, left_shoulder_fwd_angle,
+				left_shoulder_out_angle, left_elbow_angle,
+				hand(left_wrist_twist, 0, left_fingers))
 
 			translate <left_shoulder_x, shoulder_y, 0>
 		}
 		object {	// right arm
-			#local shoulder_raise_angle = 50;
-			#local shoulder_fwd_angle = -10;
-			#local shoulder_out_angle = -30;
-			#local elbow_angle = 80;
-			#local wrist_twist = 45;
-
-			#declare thumb1 = object { thumb(0,70) }
-			#declare fing1 = object { finger(45,80) }
-			#declare fingers = array[4] {
-				thumb1,
-				fing1,
-				fing1,
-				fing1
-			};
-
-			arm(shoulder_raise_angle, shoulder_fwd_angle,
-				shoulder_out_angle, elbow_angle,
-				hand(wrist_twist, 0, fingers))
+			arm(right_shoulder_raise_angle,
+				right_shoulder_fwd_angle,
+				right_shoulder_out_angle, right_elbow_angle,
+				hand(right_wrist_twist, 0, right_fingers))
 
 			scale <-1,1,1>	// right arm = mirror image of left arm
 			translate <right_shoulder_x, shoulder_y, 0>
@@ -300,21 +275,15 @@ union {
 	#local right_leg_pos = <.35*body_width, hip_y, 0>;
 	union {
 		object {	// left leg
-			#local fwd_angle = 30;
-			#local out_angle = 30;
-			#local knee_angle = 40;
-			#local foot_angle = 0;
-			leg(fwd_angle, out_angle, knee_angle, foot_angle)
+			leg(left_thigh_fwd_angle, left_thigh_out_angle,
+				left_knee_angle, left_foot_angle)
 
 			translate left_leg_pos
 		}
 
 		object {	// right leg
-			#local fwd_angle = 20;
-			#local out_angle = 20;
-			#local knee_angle = 15;
-			#local foot_angle = 0;
-			leg(fwd_angle, out_angle, knee_angle, foot_angle)
+			leg(right_thigh_fwd_angle, right_thigh_out_angle,
+				right_knee_angle, right_foot_angle)
 
 			scale <-1,1,1>	// right leg = mirror image of left leg
 			translate right_leg_pos
@@ -324,18 +293,4 @@ union {
 
 	translate <-body_width/2, waist, 0>
 }
-
-light_source { <100,400,-800> White }
-background { White*0.3 }
-camera {
-	location <-.4, .5, -2>	// final view
-	//location <-.3, .3, -1.5>
-	//location <0, .3, -1>		// front view, near
-	//location <-2, .5, -.4>	// right side view
-	look_at <0, -.1, 0>
-
-	//location <0, .4, -.5>
-	//look_at <0, .4, 0>
-
-	right x*3/3
-}
+#end
