@@ -175,7 +175,7 @@ union {
 		union {	// foot
 			sphere {
 				<0,0,0>, leg_rad
-				scale <1.5, .5, 3>
+				scale <1.5, .75, 3>
 				translate <0, 0, -leg_rad*1>
 			}
 			texture { foot_tex }
@@ -258,7 +258,7 @@ union {
 	union {
 		object {	// left leg
 			#local fwd_angle = 30;
-			#local out_angle = 10;
+			#local out_angle = 30;
 			#local knee_angle = 40;
 			#local foot_angle = 0;
 			leg(fwd_angle, out_angle, knee_angle, foot_angle)
@@ -268,8 +268,8 @@ union {
 
 		object {	// right leg
 			#local fwd_angle = 20;
-			#local out_angle = 15;
-			#local knee_angle = 10;
+			#local out_angle = 20;
+			#local knee_angle = 15;
 			#local foot_angle = 0;
 			leg(fwd_angle, out_angle, knee_angle, foot_angle)
 
