@@ -104,7 +104,7 @@ union {
 	#local i = 1;
 	#while (i < dimension_size(fingers,1))
 		//#local ang = (i-2)*45;
-		#local ang = i*180/dimension_size(fingers,1) - 90;
+		#local ang = 90 - i*180/dimension_size(fingers,1);
 		object {
 			fingers[i]
 			rotate -x*ang*.75
@@ -159,6 +159,10 @@ union {
 
 #macro leg(fwd_angle, out_angle, knee_angle, foot_angle)
 union {
+	sphere {	// hip joint
+		<0,0,0>, leg_rad
+	}
+
 	cylinder {	// thigh
 		<0,0,0>, <0, -thigh_len, 0>, leg_rad
 	}
@@ -177,6 +181,7 @@ union {
 				scale <1.5, .75, 2.5>
 			}
 			texture { foot_tex }
+			rotate -x*foot_angle
 			translate <0, -lower_leg_len, 0>
 		}
 		rotate -x*knee_angle
@@ -270,7 +275,7 @@ union {
 	}
 
 	// Legs
-	#local hip_y = 0;
+	#local hip_y = -leg_rad/2;
 	#local left_leg_pos = <.65*body_width, hip_y, 0>;
 	#local right_leg_pos = <.35*body_width, hip_y, 0>;
 	union {
