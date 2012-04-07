@@ -82,21 +82,26 @@ union {
 }
 #end
 
-#declare palm_rad = arm_rad*1.2;
+#declare palm_thickness = arm_rad*.6;
+#declare palm_rad = arm_rad*1.2 - palm_thickness;
 
 #macro hand(twist_angle, spread, fingers)
 union {
-	sphere {
-		<0,0,0>, palm_rad
-		scale <.75,1,1>
+	// Palm
+	torus {
+		palm_rad, palm_thickness
+		rotate z*90
+	}
+	cylinder {
+		<-palm_thickness, 0, 0>, <palm_thickness, 0, 0>, palm_rad
 	}
 
 	// Thumb (==fingers[0])
 	object {
 		fingers[0]
 
+		rotate y*45
 		rotate x*40
-		rotate y*30
 		translate <-palm_rad*.1, palm_rad*.4, -palm_rad*.8>
 	}
 
@@ -104,11 +109,11 @@ union {
 	#local i = 1;
 	#while (i < dimension_size(fingers,1))
 		//#local ang = (i-2)*45;
-		#local ang = 90 - i*180/dimension_size(fingers,1);
+		#local ang = 90 - i*200/dimension_size(fingers,1);
 		object {
 			fingers[i]
 			rotate -x*ang*.75
-			translate <0, -palm_rad*.9, 0>
+			translate <0, -palm_rad, 0>
 			rotate x*ang
 		}
 		#local i = i+1;
@@ -122,31 +127,43 @@ union {
 
 #macro digit(len,rad,joint_pos,base_angle,joint_angle)
 union {
-	sphere {
-		<0,-.5,0>, .65
-		scale <rad, len*joint_pos, rad>
+	sphere {	// base joint
+		<0,0,0>, rad
 	}
-	sphere {
-		<0,-.5,0>, .6
-		scale <rad, len*(1-joint_pos), rad>
+	cone {	// first segment
+		<0,0,0>, rad,
+		<0, -len*joint_pos, 0>, rad*.9
+	}
+	union {
+		sphere {	// midjoint
+			<0,0,0>, rad*.9
+		}
+		cone {		// second segment
+			<0,0,0>, rad*.9
+			<0, -len*(1-joint_pos), 0>, rad*.8
+		}
+		sphere {	// fingertip
+			<0, -len*(1-joint_pos), 0>, rad*.8
+		}
+
 		rotate -z*joint_angle
 		translate <0, -len*joint_pos, 0>
 	}
+	translate <palm_thickness - rad, 0, 0>
 	rotate -z*base_angle
 }
 #end
 
-#declare thumb_len = 0.13;
-#declare thumb_rad = 0.045;
-#declare thumb_joint_pos = 0.6;
+#declare thumb_len = 0.11;
+#declare thumb_rad = 0.027;
+#declare thumb_joint_pos = 0.7;
 
 #macro thumb(base_angle,joint_angle)
 	digit(thumb_len, thumb_rad, thumb_joint_pos, base_angle, joint_angle)
 #end
 
-#declare finger_len = 0.1;
-//#declare finger_len = 0.00001;
-#declare finger_rad = 0.04;
+#declare finger_len = 0.12;
+#declare finger_rad = 0.02;
 #declare finger_joint_pos = 0.6;	// ratio of finger_len
 
 #macro finger(base_angle,joint_angle)
