@@ -26,4 +26,5 @@ env = Environment(
 env.Pose('mascot.png', 'pose_heythere.pov')
 env.Pose('dance.png', 'pose_dance.pov')
 env.Pose('running.png', 'pose_running.pov')
+env.Pose('angry.png', 'pose_angry.pov')
 env.Pose('test_hand.png', 'test_hand.pov')

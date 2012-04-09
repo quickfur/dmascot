@@ -253,7 +253,7 @@ union {
 				}
 				box {
 					-1.1*<leg_rad,leg_rad,leg_rad>,
-					1.1*<leg_rad,0,leg_rad>
+					1.1*<leg_rad,-leg_rad/4,leg_rad>
 				}
 				translate <0, 0, -leg_rad>
 				scale <1.5, 1.3, 2.2>
@@ -273,7 +273,7 @@ union {
 #end
 
 //#declare eye_y = 0.68;
-#declare eye_y = 0.7;
+#declare eye_y = 0.71;
 #declare left_eye_pos = <.65*body_width, eye_y, 0>;
 #declare right_eye_pos = <.35*body_width, eye_y, 0>;
 #declare eye_h = 0.25;
