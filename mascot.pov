@@ -199,11 +199,6 @@ union {
 #declare finger_rad = 0.018;
 #declare finger_joint_pos = 0.5;	// ratio of finger_len
 
-// DEPRECATED
-#macro finger(base_angle,joint_angle)
-	digit(finger_len, finger_rad, finger_joint_pos, base_angle, joint_angle)
-#end
-
 // base_angles = array[5] base angles
 // joint_angles = array[5] joint angles
 //#macro make_fingers(base_angles, joint_angles)

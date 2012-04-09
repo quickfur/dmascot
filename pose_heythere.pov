@@ -36,12 +36,6 @@
 #declare right_wrist_angle = -30;
 #declare right_wrist_twist = 45;
 
-#declare right_thumb = object { thumb(0,70) }
-#declare right_fing = object { finger(45,80) }
-#declare right_fingers = array[4] {
-	right_thumb, right_fing, right_fing, right_fing
-};
-
 #declare right_fingers = make_fingers(
 	array[5][2] {
 		{ 0, 70 }	// thumb
