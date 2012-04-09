@@ -101,10 +101,10 @@ union {
 	object {
 		fingers[0]
 
-		rotate y*40
-		rotate x*40
-		//translate <-palm_rad*.1, palm_rad*.4, -palm_rad*.8>
-		translate <0, palm_rad*.4, -palm_rad*.9>
+		rotate y*20
+		rotate x*50
+		rotate y*20
+		translate <0, palm_rad*.5, -palm_rad*.85>
 	}
 
 	// Fingers

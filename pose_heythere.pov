@@ -29,20 +29,20 @@
 	}
 );
 
-#declare right_shoulder_raise_angle = 50;
+#declare right_shoulder_raise_angle = 40;
 #declare right_shoulder_fwd_angle = -10;
 #declare right_shoulder_out_angle = -30;
-#declare right_elbow_angle = 80;
-#declare right_wrist_angle = -30;
+#declare right_elbow_angle = 70;
+#declare right_wrist_angle = -20;
 #declare right_wrist_twist = 45;
 
 #declare right_fingers = make_fingers(
 	array[5][2] {
-		{ 0, 70 }	// thumb
-		{ 40, 70 }	// index finger
-		{ 40, 70 }	// middle finger
-		{ 40, 70 }	// ring finger
-		{ 40, 70 }	// little finger
+		{ 0, 40 }	// thumb
+		{ 40, 40 }	// index finger
+		{ 40, 35 }	// middle finger
+		{ 40, 30 }	// ring finger
+		{ 40, 30 }	// little finger
 	}
 );
 

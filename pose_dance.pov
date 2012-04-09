@@ -38,11 +38,11 @@
 
 #declare right_fingers = make_fingers(
 	array[5][2] {
-		{ 0, 80 }	// thumb
-		{ 70, 80 }	// index finger
-		{ 70, 80 }	// middle finger
-		{ 70, 80 }	// ring finger
-		{ 70, 80 }	// little finger
+		{ 0, 90 }	// thumb
+		{ 90, 80 }	// index finger
+		{ 90, 80 }	// middle finger
+		{ 90, 80 }	// ring finger
+		{ 90, 80 }	// little finger
 	}
 );
 
