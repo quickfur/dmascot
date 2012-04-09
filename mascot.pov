@@ -82,10 +82,11 @@ union {
 }
 #end
 
-#declare palm_thickness = arm_rad*.6;
+//#declare palm_thickness = arm_rad*.6;
+#declare palm_thickness = 0.02;
 #declare palm_rad = arm_rad*1.2 - palm_thickness;
 
-#macro hand(twist_angle, spread, fingers)
+#macro hand(wrist_angle, twist_angle, spread, fingers)
 union {
 	// Palm
 	torus {
@@ -100,9 +101,10 @@ union {
 	object {
 		fingers[0]
 
-		rotate y*45
+		rotate y*40
 		rotate x*40
-		translate <-palm_rad*.1, palm_rad*.4, -palm_rad*.8>
+		//translate <-palm_rad*.1, palm_rad*.4, -palm_rad*.8>
+		translate <0, palm_rad*.4, -palm_rad*.9>
 	}
 
 	// Fingers
@@ -112,13 +114,15 @@ union {
 		#local ang = 90 - i*200/dimension_size(fingers,1);
 		object {
 			fingers[i]
-			rotate -x*ang*.75
+			rotate -x*ang*.8
 			translate <0, -palm_rad, 0>
 			rotate x*ang
+			translate <0, -palm_thickness/2, 0>
 		}
 		#local i = i+1;
 	#end
 
+	rotate -z*wrist_angle
 	rotate -y*twist_angle
 	translate <0, -palm_rad, 0>
 	texture { hand_tex }
@@ -127,47 +131,103 @@ union {
 
 #macro digit(len,rad,joint_pos,base_angle,joint_angle)
 union {
+	#local joint2_ratio = .67;
+	#local joint_pos2 = joint2_ratio * (1-joint_pos);
+	#local len1 = len*joint_pos;
+	#local len2 = len*joint_pos2;
+	#local len3 = len*(1-joint_pos2-joint_pos);
+
+	#local tip_rad_ratio = .85;
+	#local tip_rad = rad*tip_rad_ratio;
+	#local rad2 = rad + joint_pos*(tip_rad - rad);
+	#local rad3 = rad + (joint_pos+joint_pos2)*(tip_rad - rad);
+
+	#if (0) // DEBUG ONLY
+	cylinder {
+		<0,0,0>, <0,-len,0>, rad/2
+		pigment { Black }
+	}
+	#end
+
 	sphere {	// base joint
 		<0,0,0>, rad
 	}
 	cone {	// first segment
 		<0,0,0>, rad,
-		<0, -len*joint_pos, 0>, rad*.9
+		<0, -len1, 0>, rad2
 	}
 	union {
-		sphere {	// midjoint
-			<0,0,0>, rad*.9
+		sphere {	// first joint
+			<0,0,0>, rad2
 		}
 		cone {		// second segment
-			<0,0,0>, rad*.9
-			<0, -len*(1-joint_pos), 0>, rad*.8
+			<0,0,0>, rad2
+			<0, -len2, 0>, rad3
 		}
-		sphere {	// fingertip
-			<0, -len*(1-joint_pos), 0>, rad*.8
+		sphere {	// second joint
+			<0, -len2, 0>, rad3
+		}
+		union {		// fingertip
+			cone {
+				<0,0,0>, rad3
+				<0, -len3, 0>, tip_rad
+			}
+			sphere {
+				<0, -len3, 0>, tip_rad
+			}
+			rotate -z*joint_angle
+			translate <0, -len2, 0>
 		}
 
 		rotate -z*joint_angle
-		translate <0, -len*joint_pos, 0>
+		translate <0, -len1, 0>
 	}
 	translate <palm_thickness - rad, 0, 0>
 	rotate -z*base_angle
 }
 #end
 
-#declare thumb_len = 0.11;
-#declare thumb_rad = 0.027;
-#declare thumb_joint_pos = 0.7;
+#declare thumb_len = 0.09;
+#declare thumb_rad = 0.02;
+#declare thumb_joint_pos = 0.4;
 
 #macro thumb(base_angle,joint_angle)
 	digit(thumb_len, thumb_rad, thumb_joint_pos, base_angle, joint_angle)
 #end
 
-#declare finger_len = 0.12;
-#declare finger_rad = 0.02;
-#declare finger_joint_pos = 0.6;	// ratio of finger_len
+#declare finger_len = 0.11;
+#declare finger_rad = 0.018;
+#declare finger_joint_pos = 0.5;	// ratio of finger_len
 
+// DEPRECATED
 #macro finger(base_angle,joint_angle)
 	digit(finger_len, finger_rad, finger_joint_pos, base_angle, joint_angle)
+#end
+
+// base_angles = array[5] base angles
+// joint_angles = array[5] joint angles
+//#macro make_fingers(base_angles, joint_angles)
+// angles = array[5][2] of base/joint angles for each finger
+#macro make_fingers(angles)
+	#local fingers = array[5];
+	#local fingers[0] = thumb(angles[0][0], angles[0][1])
+	#local fingers[1] = object {
+		digit(finger_len*1, finger_rad*1, finger_joint_pos,
+			angles[1][0], angles[1][1])
+	}
+	#local fingers[2] = object {
+		digit(finger_len*1, finger_rad*1, finger_joint_pos,
+			angles[2][0], angles[2][1])
+	}
+	#local fingers[3] = object {
+		digit(finger_len*.93, finger_rad*.93, finger_joint_pos,
+			angles[3][0], angles[3][1])
+	}
+	#local fingers[4] = object {
+		digit(finger_len*.85, finger_rad*.85, finger_joint_pos,
+			angles[4][0], angles[4][1])
+	}
+	fingers
 #end
 
 #declare leg_rad = arm_rad*1.2;
@@ -281,7 +341,8 @@ union {
 		object {	// left arm
 			arm(left_shoulder_raise_angle, left_shoulder_fwd_angle,
 				left_shoulder_out_angle, left_elbow_angle,
-				hand(left_wrist_twist, 0, left_fingers))
+				hand(left_wrist_angle, left_wrist_twist, 0,
+					left_fingers))
 
 			translate <left_shoulder_x, shoulder_y, 0>
 		}
@@ -289,7 +350,8 @@ union {
 			arm(right_shoulder_raise_angle,
 				right_shoulder_fwd_angle,
 				right_shoulder_out_angle, right_elbow_angle,
-				hand(right_wrist_twist, 0, right_fingers))
+				hand(right_wrist_angle, right_wrist_twist, 0,
+					right_fingers))
 
 			scale <-1,1,1>	// right arm = mirror image of left arm
 			translate <right_shoulder_x, shoulder_y, 0>

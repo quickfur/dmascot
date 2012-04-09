@@ -16,24 +16,36 @@
 #declare left_shoulder_fwd_angle = 80;
 #declare left_shoulder_out_angle = 20;
 #declare left_elbow_angle = 110;
+#declare left_wrist_angle = -30;
 #declare left_wrist_twist = 0;
+
+#declare left_fingers = make_fingers(
+	array[5][2] {
+		{ 0, 80 }	// thumb
+		{ 70, 80 }	// index finger
+		{ 70, 80 }	// middle finger
+		{ 70, 80 }	// ring finger
+		{ 70, 80 }	// little finger
+	}
+);
 
 #declare right_shoulder_raise_angle = 40;
 #declare right_shoulder_fwd_angle = -110;
 #declare right_shoulder_out_angle = -10;
 #declare right_elbow_angle = 70;
+#declare right_wrist_angle = -30;
 #declare right_wrist_twist = 0;
 
-#declare curled_thumb = object { thumb(40,90) }
-#declare curled_finger = object { finger(90,90) }
+#declare right_fingers = make_fingers(
+	array[5][2] {
+		{ 0, 80 }	// thumb
+		{ 70, 80 }	// index finger
+		{ 70, 80 }	// middle finger
+		{ 70, 80 }	// ring finger
+		{ 70, 80 }	// little finger
+	}
+);
 
-#declare left_fingers = array[4] {
-	curled_thumb, curled_finger, curled_finger, curled_finger
-};
-
-#declare right_fingers = array[4] {
-	curled_thumb, curled_finger, curled_finger, curled_finger
-};
 
 #declare left_thigh_fwd_angle = 80;
 #declare left_thigh_out_angle = 10;
